@@ -6,18 +6,14 @@ const ApiError = require('../utils/apiError');
 module.exports = {
     createProduct: catchAsync(async (req, res) => {
         const product = await productService.create(req.body);
-        res.status(httpStatus.CREATED).json({
-            message: 'Product created successfully',
-            data: product,
-        });
+        res.status(httpStatus.CREATED).json({ message: 'created', data: product });
     }),
 
     getProducts: catchAsync(async (req, res) => {
-        const products = await productService.getAll();
-        res.status(httpStatus.OK).json({
-            message: 'Products retrieved successfully',
-            data: products,
-        });
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const data = await productService.getAll({}, { page, limit });
+        res.status(httpStatus.OK).json({ message: 'ok', data });
     }),
 
     getProduct: catchAsync(async (req, res) => {
@@ -25,10 +21,7 @@ module.exports = {
         if (!product) {
             throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
         }
-        res.status(httpStatus.OK).json({
-            message: 'Product retrieved successfully',
-            data: product,
-        });
+        res.status(httpStatus.OK).json({ message: 'ok', data: product });
     }),
 
     updateProduct: catchAsync(async (req, res) => {
@@ -36,10 +29,7 @@ module.exports = {
         if (!product) {
             throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
         }
-        res.status(httpStatus.OK).json({
-            message: 'Product updated successfully',
-            data: product,
-        });
+        res.status(httpStatus.OK).json({ message: 'updated', data: product });
     }),
 
     deleteProduct: catchAsync(async (req, res) => {
@@ -47,8 +37,6 @@ module.exports = {
         if (!product) {
             throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
         }
-        res.status(httpStatus.OK).json({
-            message: 'Product deleted successfully',
-        });
+        res.status(httpStatus.OK).json({ message: 'deleted' });
     }),
 };

@@ -24,6 +24,13 @@ const createProduct = {
     }),
 };
 
+const getProducts = {
+    query: Joi.object().keys({
+        page: Joi.number().integer().min(1),
+        limit: Joi.number().integer().min(1).max(100),
+    }),
+};
+
 const getProduct = {
     params: Joi.object().keys({
         id: Joi.string().required(),
@@ -65,6 +72,7 @@ const deleteProduct = {
 
 module.exports = {
     createProduct,
+    getProducts,
     getProduct,
     updateProduct,
     deleteProduct,
